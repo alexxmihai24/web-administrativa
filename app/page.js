@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import TramiteCard from '@/components/TramiteCard';
 import { useLanguage } from '@/lib/LanguageContext';
 import ContactModal from '@/components/ContactModal';
@@ -71,6 +72,23 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+          {/* Foto de Perfil de Alex (Avatar) */}
+          <div className="relative w-40 h-40 mx-auto mb-8 group animate-fade-in">
+            {/* Halo/Resplandor animado detrás de la foto */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 rounded-full blur opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
+
+            {/* Contenedor de la imagen */}
+            <div className="relative w-full h-full rounded-full overflow-hidden border-4 border-slate-800 shadow-2xl bg-black">
+              <Image
+                src="/alex-profile.png"
+                alt="Alex - Asesor Administrativo"
+                fill
+                className="object-cover object-top transform group-hover:scale-110 transition duration-500"
+                priority
+              />
+            </div>
+          </div>
 
           {/* Mensaje de Bienvenida con efecto Glass */}
           <div className="inline-block mb-8 animate-fade-in">
