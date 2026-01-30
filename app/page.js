@@ -51,86 +51,112 @@ export default function Home() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-r from-blue-900 via-indigo-800 to-purple-900 text-white py-20">
-        {/* Pattern de fondo */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}></div>
+    <div className="min-h-screen bg-slate-900 overflow-hidden text-white selection:bg-yellow-400 selection:text-black">
+      {/* 
+        ==============================
+        HERO SECTION "MÁGICO"
+        ============================== 
+      */}
+      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28">
+
+        {/* FONDO ANIMADO DE BLOBS DE COLORES */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+          <div className="absolute top-0 right-1/4 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          {/* Mensaje de Bienvenida Personalizado */}
-          <div className="mb-8 animate-fade-in">
-            <p className="text-2xl md:text-3xl font-semibold text-yellow-200 mb-2">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+
+          {/* Mensaje de Bienvenida con efecto Glass */}
+          <div className="inline-block mb-8 animate-fade-in">
+            <span className="py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 font-semibold tracking-wide shadow-lg hover:bg-white/20 transition-all duration-300 transform hover:scale-105 cursor-default">
               👋 Bienvenido a la Web Administrativa de Alex
-            </p>
+            </span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-yellow-100 to-white">
-            {t.home.hero.title}
+          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight tracking-tight">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200 pb-2">
+              Gestión Inteligente
+            </span>
+            <span className="text-gradient-animate">
+              Sin Complicaciones
+            </span>
           </h1>
-          <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto leading-relaxed">
+
+          <p className="text-xl md:text-2xl text-blue-200 max-w-3xl mx-auto leading-relaxed mb-12 animate-fade-in animation-delay-2000 font-light">
             {t.home.hero.subtitle}
           </p>
 
-          {/* Stats */}
-          <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
-              <div className="text-3xl font-bold text-yellow-300">24/7</div>
-              <div className="text-sm text-blue-100 mt-2">{t.home.hero.stats.available}</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
-              <div className="text-3xl font-bold text-yellow-300">4</div>
-              <div className="text-sm text-blue-100 mt-2">{t.home.hero.stats.areas}</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
-              <div className="text-3xl font-bold text-yellow-300">100%</div>
-              <div className="text-sm text-blue-100 mt-2">{t.home.hero.stats.info}</div>
-            </div>
-            <div className="bg-white/10 backdrop-blur-lg rounded-xl p-6 transform hover:scale-105 transition-all duration-300">
-              <div className="text-3xl font-bold text-yellow-300">IA</div>
-              <div className="text-sm text-blue-100 mt-2">{t.home.hero.stats.ai}</div>
-            </div>
+          {/* Stats Flotantes */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto perspective-1000">
+            {[
+              { val: "24/7", label: t.home.hero.stats.available, color: "from-green-400 to-emerald-600" },
+              { val: "4", label: t.home.hero.stats.areas, color: "from-blue-400 to-indigo-600" },
+              { val: "100%", label: t.home.hero.stats.info, color: "from-purple-400 to-pink-600" },
+              { val: "IA", label: t.home.hero.stats.ai, color: "from-yellow-400 to-orange-600" }
+            ].map((stat, i) => (
+              <div key={i} className="group relative">
+                <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500`}></div>
+                <div className="relative bg-black/40 backdrop-blur-xl rounded-xl p-6 border border-white/10 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                  <div className={`text-4xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                    {stat.val}
+                  </div>
+                  <div className="text-sm text-gray-300 mt-2 font-medium tracking-wide uppercase">{stat.label}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Sección de Trámites */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
-            {t.home.tramites.title}
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            {t.home.tramites.subtitle}
-          </p>
-        </div>
+      {/* 
+        ==============================
+        SECCIÓN DE TRÁMITES (TARJETAS)
+        ============================== 
+      */}
+      <section className="relative py-24 bg-gradient-to-b from-slate-900 to-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-6">
+              {t.home.tramites.title}
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
+              {t.home.tramites.subtitle}
+            </p>
+          </div>
 
-        {/* Grid de Tarjetas */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {tramites.map((tramite) => (
-            <TramiteCard
-              key={tramite.slug}
-              titulo={tramite.titulo}
-              descripcion={tramite.descripcion}
-              slug={tramite.slug}
-              icono={tramite.icono}
-            />
-          ))}
-        </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {tramites.map((tramite) => (
+              <TramiteCard
+                key={tramite.slug}
+                titulo={tramite.titulo}
+                descripcion={tramite.descripcion}
+                slug={tramite.slug}
+                icono={tramite.icono}
+              />
+            ))}
+          </div>
 
-        {/* CTA adicional */}
-        <div className="mt-20 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl shadow-2xl p-12 text-center text-white">
-          <h3 className="text-3xl font-bold mb-4">{t.home.cta.title}</h3>
-          <p className="text-xl mb-8 text-blue-100">
-            {t.home.cta.subtitle}
-          </p>
-          <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300">
-            {t.home.cta.button}
-          </button>
+          {/* CTA DEFINITIVO */}
+          <div className="mt-28 relative group max-w-4xl mx-auto">
+            <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl p-12 text-center border border-white/10">
+              <h3 className="text-4xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300">
+                {t.home.cta.title}
+              </h3>
+              <p className="text-xl text-gray-300 mb-8 font-light leading-relaxed">
+                {t.home.cta.subtitle}
+              </p>
+              <button className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:scale-110 transition-all duration-300 flex items-center justify-center mx-auto space-x-2">
+                <span>{t.home.cta.button}</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </section>
     </div>

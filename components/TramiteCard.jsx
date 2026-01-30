@@ -1,46 +1,42 @@
+'use client';
+
 import Link from 'next/link';
 
 export default function TramiteCard({ titulo, descripcion, slug, icono }) {
     return (
-        <div className="group relative bg-gradient-to-br from-white to-gray-50 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-200 hover:border-blue-400 transform hover:-translate-y-2">
-            {/* Efecto de brillo al hacer hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-400/10 to-blue-400/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+        <Link href={`/tramite/${slug}`} className="group relative block h-full">
+            {/* Glossy Gradient Border Effect */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl opacity-20 group-hover:opacity-100 transition duration-500 blur-sm group-hover:blur-md"></div>
 
-            <div className="relative p-8 space-y-6">
-                {/* Icono */}
-                <div className="flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    {icono}
+            {/* Card Content */}
+            <div className="relative h-full bg-slate-900/90 backdrop-blur-xl border border-white/10 rounded-2xl p-8 transition-all duration-300 transform group-hover:-translate-y-2 overflow-hidden">
+
+                {/* Background Glow inside card */}
+                <div className="absolute -right-10 -top-10 w-32 h-32 bg-blue-500/20 rounded-full blur-3xl group-hover:bg-purple-500/30 transition-all duration-500"></div>
+
+                {/* Icon Container with Neo-morphism feel */}
+                <div className="relative mb-6 inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 border border-white/10 shadow-lg group-hover:scale-110 transition-transform duration-300 group-hover:border-white/30">
+                    <div className="text-blue-400 group-hover:text-yellow-400 transition-colors duration-300 transform group-hover:rotate-12">
+                        {icono}
+                    </div>
                 </div>
 
-                {/* Título */}
-                <h3 className="text-2xl font-bold text-gray-800 group-hover:text-blue-600 transition-colors duration-300">
+                <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-200 group-hover:to-purple-200 transition-all duration-300">
                     {titulo}
                 </h3>
 
-                {/* Descripción */}
-                <p className="text-gray-600 leading-relaxed min-h-[4rem]">
+                <p className="text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">
                     {descripcion}
                 </p>
 
-                {/* Botón */}
-                <Link
-                    href={`/tramite/${slug}`}
-                    className="inline-flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-md hover:shadow-xl transform hover:scale-105 transition-all duration-300 group/btn"
-                >
-                    <span>Consultar</span>
-                    <svg
-                        className="ml-2 w-5 h-5 group-hover/btn:translate-x-1 transition-transform duration-300"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                {/* Arrow indicator */}
+                <div className="mt-6 flex items-center text-sm font-medium text-blue-400 opacity-0 group-hover:opacity-100 transform translate-x-[-10px] group-hover:translate-x-0 transition-all duration-300">
+                    <span className="mr-2">Comenzar trámite</span>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                     </svg>
-                </Link>
+                </div>
             </div>
-
-            {/* Borde decorativo animado */}
-            <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left"></div>
-        </div>
+        </Link>
     );
 }
