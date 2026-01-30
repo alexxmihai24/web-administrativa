@@ -1,10 +1,13 @@
 'use client';
 
+import { useState } from 'react';
 import TramiteCard from '@/components/TramiteCard';
 import { useLanguage } from '@/lib/LanguageContext';
+import ContactModal from '@/components/ContactModal';
 
 export default function Home() {
   const { t } = useLanguage();
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const tramites = [
     {
@@ -149,7 +152,12 @@ export default function Home() {
               <p className="text-xl text-gray-300 mb-8 font-light leading-relaxed">
                 {t.home.cta.subtitle}
               </p>
-              <button className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:scale-110 transition-all duration-300 flex items-center justify-center mx-auto space-x-2">
+
+              {/* Botón ahora funcional: Abre el Modal de Contacto */}
+              <button
+                onClick={() => setIsContactModalOpen(true)}
+                className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:scale-110 transition-all duration-300 flex items-center justify-center mx-auto space-x-2 cursor-pointer"
+              >
                 <span>{t.home.cta.button}</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -159,6 +167,9 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Modal de Contacto Conectado */}
+      <ContactModal isOpen={isContactModalOpen} onClose={() => setIsContactModalOpen(false)} />
     </div>
   );
 }
