@@ -61,20 +61,20 @@ export default function Home() {
         HERO SECTION "MÁGICO"
         ============================== 
       */}
-      <section className="relative pt-32 pb-20 lg:pt-40 lg:pb-28">
+      <section className="relative pt-24 pb-16 lg:pt-40 lg:pb-28"> {/* Padding reducido en movil */}
 
         {/* FONDO ANIMADO DE BLOBS DE COLORES */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
-          <div className="absolute top-0 right-1/4 w-96 h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
-          <div className="absolute -bottom-32 left-1/3 w-96 h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
+          <div className="absolute top-0 left-1/4 w-64 h-64 md:w-96 md:h-96 bg-purple-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+          <div className="absolute top-0 right-1/4 w-64 h-64 md:w-96 md:h-96 bg-yellow-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+          <div className="absolute -bottom-32 left-1/3 w-64 h-64 md:w-96 md:h-96 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-4000"></div>
           <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
           {/* Foto de Perfil de Alex (Avatar) */}
-          <div className="relative w-40 h-40 mx-auto mb-8 group animate-fade-in">
+          <div className="relative w-32 h-32 md:w-44 md:h-44 mx-auto mb-6 md:mb-8 group animate-fade-in">
             {/* Halo/Resplandor animado detrás de la foto */}
             <div className="absolute -inset-1 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-400 rounded-full blur opacity-50 group-hover:opacity-100 transition duration-1000 group-hover:duration-200"></div>
 
@@ -91,13 +91,13 @@ export default function Home() {
           </div>
 
           {/* Mensaje de Bienvenida con efecto Glass */}
-          <div className="inline-block mb-8 animate-fade-in">
-            <span className="py-2 px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 font-semibold tracking-wide shadow-lg hover:bg-white/20 transition-all duration-300 transform hover:scale-105 cursor-default">
+          <div className="inline-block mb-6 md:mb-8 animate-fade-in">
+            <span className="py-2 px-4 md:px-6 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-yellow-300 text-sm md:text-base font-semibold tracking-wide shadow-lg hover:bg-white/20 transition-all duration-300 transform hover:scale-105 cursor-default">
               👋 Bienvenido a la Web Administrativa de Alex
             </span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-black mb-8 leading-tight tracking-tight">
+          <h1 className="text-4xl sm:text-5xl md:text-8xl font-black mb-6 md:mb-8 leading-tight tracking-tight">
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-200 pb-2">
               Gestión Inteligente
             </span>
@@ -106,12 +106,12 @@ export default function Home() {
             </span>
           </h1>
 
-          <p className="text-xl md:text-2xl text-blue-200 max-w-3xl mx-auto leading-relaxed mb-12 animate-fade-in animation-delay-2000 font-light">
+          <p className="text-lg md:text-2xl text-blue-200 max-w-3xl mx-auto leading-relaxed mb-10 md:mb-12 animate-fade-in animation-delay-2000 font-light px-2">
             {t.home.hero.subtitle}
           </p>
 
           {/* Stats Flotantes */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto perspective-1000">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 max-w-5xl mx-auto perspective-1000">
             {[
               { val: "24/7", label: t.home.hero.stats.available, color: "from-green-400 to-emerald-600" },
               { val: "4", label: t.home.hero.stats.areas, color: "from-blue-400 to-indigo-600" },
@@ -120,11 +120,11 @@ export default function Home() {
             ].map((stat, i) => (
               <div key={i} className="group relative">
                 <div className={`absolute -inset-0.5 bg-gradient-to-r ${stat.color} rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-500`}></div>
-                <div className="relative bg-black/40 backdrop-blur-xl rounded-xl p-6 border border-white/10 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
-                  <div className={`text-4xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
+                <div className="relative bg-black/40 backdrop-blur-xl rounded-xl p-4 md:p-6 border border-white/10 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl">
+                  <div className={`text-2xl md:text-4xl font-black bg-gradient-to-r ${stat.color} bg-clip-text text-transparent`}>
                     {stat.val}
                   </div>
-                  <div className="text-sm text-gray-300 mt-2 font-medium tracking-wide uppercase">{stat.label}</div>
+                  <div className="text-xs md:text-sm text-gray-300 mt-1 md:mt-2 font-medium tracking-wide uppercase">{stat.label}</div>
                 </div>
               </div>
             ))}
@@ -137,18 +137,18 @@ export default function Home() {
         SECCIÓN DE TRÁMITES (TARJETAS)
         ============================== 
       */}
-      <section className="relative py-24 bg-gradient-to-b from-slate-900 to-black">
+      <section className="relative py-16 md:py-24 bg-gradient-to-b from-slate-900 to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-6">
+          <div className="text-center mb-12 md:mb-20">
+            <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400 mb-4 md:mb-6">
               {t.home.tramites.title}
             </h2>
-            <p className="text-xl text-gray-400 max-w-2xl mx-auto font-light">
+            <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto font-light">
               {t.home.tramites.subtitle}
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
             {tramites.map((tramite) => (
               <TramiteCard
                 key={tramite.slug}
@@ -161,20 +161,20 @@ export default function Home() {
           </div>
 
           {/* CTA DEFINITIVO */}
-          <div className="mt-28 relative group max-w-4xl mx-auto">
+          <div className="mt-20 md:mt-28 relative group max-w-4xl mx-auto">
             <div className="absolute -inset-1 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 rounded-2xl blur opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
-            <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl p-12 text-center border border-white/10">
-              <h3 className="text-4xl font-bold text-white mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300">
+            <div className="relative bg-black/80 backdrop-blur-xl rounded-2xl p-8 md:p-12 text-center border border-white/10">
+              <h3 className="text-2xl md:text-4xl font-bold text-white mb-4 md:mb-6 bg-clip-text text-transparent bg-gradient-to-r from-pink-300 via-purple-300 to-indigo-300">
                 {t.home.cta.title}
               </h3>
-              <p className="text-xl text-gray-300 mb-8 font-light leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-300 mb-6 md:mb-8 font-light leading-relaxed">
                 {t.home.cta.subtitle}
               </p>
 
               {/* Botón ahora funcional: Abre el Modal de Contacto */}
               <button
                 onClick={() => setIsContactModalOpen(true)}
-                className="bg-white text-black px-10 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:scale-110 transition-all duration-300 flex items-center justify-center mx-auto space-x-2 cursor-pointer"
+                className="w-full md:w-auto bg-white text-black px-8 py-4 rounded-full font-bold text-lg shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_30px_rgba(255,255,255,0.5)] transform hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center mx-auto space-x-2 cursor-pointer"
               >
                 <span>{t.home.cta.button}</span>
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
