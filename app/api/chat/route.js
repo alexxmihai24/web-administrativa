@@ -113,64 +113,68 @@ CIERRE DE VENTA OBLIGATORIO (Solo cuando expliques un trámite complicado o el u
 
         try {
             // ... (logs de conexión) ...
+            const startTime = Date.now(); // Definir startTime aquí para que esté disponible en el try
 
             // Construir historial de mensajes para Groq
             let conversationHistory = [
                 { role: "system", content: systemInstructions }
             ];
 
-            if (messages && Array.isArray(messages)) {
-                // Si viene historial completo del frontend, lo usamos
-                // Filtramos solo user y assistant para evitar errores, y quitamos mensajes de error previos
-                const cleanHistory = messages.map(m => ({
-                    role: m.role === 'user' ? 'user' : 'assistant',
-                    content: m.content
-                }));
+            if (messages && Array.isArray(messages) && messages.length > 0) {
+                // Filtrar mensajes válidos (que tengan contenido y rol correcto)
+                const cleanHistory = messages
+                    .filter(m => m.content && (m.role === 'user' || m.role === 'assistant'))
+                    .map(m => ({
+                        role: m.role,
+                        content: String(m.content) // Asegurar que sea string
+                    }));
+
                 conversationHistory = [...conversationHistory, ...cleanHistory];
-
-                // Aseguramos que el último mensaje sea el del usuario (si no está ya incluido)
-                const lastMsg = cleanHistory[cleanHistory.length - 1];
-                if (!lastMsg || lastMsg.content !== message) {
-                    conversationHistory.push({ role: "user", content: message });
-                }
-
             } else {
-                // Modo antiguo (sin historial), solo mensaje actual
-                conversationHistory.push({ role: "user", content: message });
+                // Si no hay historial, usamos el mensaje actual si existe
+                if (message) {
+                    conversationHistory.push({ role: "user", content: String(message) });
+                }
             }
+
+            // Asegurarse de que el último mensaje es del usuario (Groq a veces falla si el último es assistant)
+            // Y asegurar que no enviamos un historial donde el último mensaje ya es el que queremos responder
+            const lastMsg = conversationHistory[conversationHistory.length - 1];
+            if (message && (!lastMsg || lastMsg.content !== message || lastMsg.role !== 'user')) {
+                conversationHistory.push({ role: "user", content: String(message) });
+            }
+
+            // LOG DE DEPURACIÓN (Para ver qué enviamos)
+            console.log('📤 Enviando a Groq:', JSON.stringify(conversationHistory.map(m => ({ r: m.role, c: m.content.substring(0, 50) + '...' })), null, 2));
 
             const completion = await groq.chat.completions.create({
                 model: "llama-3.3-70b-versatile",
-                messages: conversationHistory, // Usamos el historial
+                messages: conversationHistory,
                 temperature: 0.7,
                 max_tokens: 1024,
             });
 
-            // ... (resto igual) ...
+            const endTime = Date.now();
+            aiResponse = completion.choices[0].message.content;
+
+            console.log('✅ Respuesta de Groq recibida correctamente');
             console.log('📏 Longitud de respuesta:', aiResponse.length, 'caracteres');
             console.log('⏱️  Tiempo:', endTime - startTime, 'ms');
             console.log('🚀 Modelo usado:', completion.model);
 
         } catch (groqError) {
-            console.error('⚠️ Error conectando con Groq:');
-            console.error('  - Mensaje:', groqError.message);
-            console.error('  - Tipo:', groqError.constructor.name);
-            if (groqError.stack) {
-                console.error('  - Stack:', groqError.stack.split('\n').slice(0, 3).join('\n'));
-            }
+            console.error('⚠️ Error CONECTANDO con Groq:', groqError); // Log completo del error
+            console.error('⚠️ Detalles del error:', JSON.stringify(groqError.error || {}, null, 2)); // Detalles si existen
 
             // RESPUESTA DE CONTINGENCIA (FALLBACK)
-            aiResponse = `[MODO SIN CONEXIÓN] Lo siento, en este momento tengo dificultades para conectar con mi cerebro de IA, pero puedo darte información básica sobre **${config.nombre}**.
-
-${config.descripcion}
-
-**Trámites comunes:**
-${config.nombre.includes('Consulado') ? '- Renovación de pasaporte\n- Solicitud de visados\n- Registro de matrícula consular' : ''}
-${config.nombre.includes('SEPE') ? '- Solicitud de paro\n- Renovación de demanda\n- Cursos de formación' : ''}
-${config.nombre.includes('Seguridad Social') ? '- Vida laboral\n- Altas y bajas\n- Tarjeta Sanitaria Europea' : ''}
-${config.nombre.includes('Hacienda') ? '- Declaración de la Renta\n- Certificados tributarios\n- Alta de autónomos' : ''}
-
-💡 Para una ayuda más personalizada, por favor usa el botón de **WhatsApp** que verás en esta página para hablar con un agente humano.`;
+            aiResponse = `[MODO SIN CONEXIÓN] Lo siento, ha habido un problema técnico momentáneo.
+            
+            Pero aquí tienes la información básica para **${config.nombre}**:
+            
+            ${config.descripcion}
+            
+            🚀 **Si necesitas ayuda urgente o el trámite es complejo**:
+            👉 Pulsa el botón de **WhatsApp** y habla directamente con Alex (10€/trámite).`;
         }
 
         return NextResponse.json({
