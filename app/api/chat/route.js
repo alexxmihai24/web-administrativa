@@ -136,22 +136,22 @@ CIERRE OBLIGATORIO (al final de CADA respuesta, deja 2 líneas vacías antes):
             }
 
             // RESPUESTA DE CONTINGENCIA (FALLBACK)
-            aiResponse = `[MODO SIN CONEXIÓN] Lo siento, en este momento tengo dificultades para conectar con mi cerebro de IA, pero puedo darte información básica sobre **${tramite.nombre}**.
+            aiResponse = `[MODO SIN CONEXIÓN] Lo siento, en este momento tengo dificultades para conectar con mi cerebro de IA, pero puedo darte información básica sobre **${config.nombre}**.
 
-${tramite.descripcion}
+${config.descripcion}
 
 **Trámites comunes:**
-${tramite.nombre === 'Consulados' ? '- Renovación de pasaporte\n- Solicitud de visados\n- Registro de matrícula consular' : ''}
-${tramite.nombre === 'SEPE' ? '- Solicitud de paro\n- Renovación de demanda\n- Cursos de formación' : ''}
-${tramite.nombre === 'Seguridad Social' ? '- Vida laboral\n- Altas y bajas\n- Tarjeta Sanitaria Europea' : ''}
-${tramite.nombre === 'Hacienda' ? '- Declaración de la Renta\n- Certificados tributarios\n- Alta de autónomos' : ''}
+${config.nombre.includes('Consulado') ? '- Renovación de pasaporte\n- Solicitud de visados\n- Registro de matrícula consular' : ''}
+${config.nombre.includes('SEPE') ? '- Solicitud de paro\n- Renovación de demanda\n- Cursos de formación' : ''}
+${config.nombre.includes('Seguridad Social') ? '- Vida laboral\n- Altas y bajas\n- Tarjeta Sanitaria Europea' : ''}
+${config.nombre.includes('Hacienda') ? '- Declaración de la Renta\n- Certificados tributarios\n- Alta de autónomos' : ''}
 
 💡 Para una ayuda más personalizada, por favor usa el botón de **WhatsApp** que verás en esta página para hablar con un agente humano.`;
         }
 
         return NextResponse.json({
             response: aiResponse,
-            tramite: tramite.nombre,
+            tramite: config.nombre,
             consultaId: null, // Sin base de datos por ahora
             ragInfo: {
                 similarQueriesFound: 0,
