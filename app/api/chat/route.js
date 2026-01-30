@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import prisma from '@/lib/prisma';
-import { findSimilarQueries, buildRAGContext } from '@/lib/ragHelpers';
+import Groq from 'groq-sdk';
 
-// Inicializar Gemini
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+// Inicializar Groq (API gratuita y rápida)
+const groq = new Groq({
+    apiKey: process.env.GROQ_API_KEY || '',
+});
 
 export async function POST(request) {
     try {
@@ -17,25 +17,34 @@ export async function POST(request) {
             );
         }
 
-        // Consultar información del trámite en la base de datos
-        const tramite = await prisma.tramite.findUnique({
-            where: { slug: slug }
-        });
+        console.log(`📩 Mensaje recibido: "${message}" para slug: ${slug}`);
 
-        if (!tramite) {
-            return NextResponse.json(
-                { error: 'Trámite no encontrado' },
-                { status: 404 }
-            );
-        }
+        // Información básica de trámites (sin base de datos)
+        const tramitesInfo = {
+            'consulados': {
+                nombre: 'Consulados',
+                descripcion: 'Servicios consulares para ciudadanos españoles en el extranjero'
+            },
+            'sepe': {
+                nombre: 'SEPE',
+                descripcion: 'Servicio Público de Empleo Estatal - Prestaciones por desempleo'
+            },
+            'seguridad-social': {
+                nombre: 'Seguridad Social',
+                descripcion: 'Trámites relacionados con la Seguridad Social'
+            },
+            'hacienda': {
+                nombre: 'Hacienda',
+                descripcion: 'Agencia Tributaria - Impuestos y declaraciones'
+            }
+        };
 
-        // 🧠 RAG: Encontrar consultas similares previas
-        const similarQueries = await findSimilarQueries(prisma, message, slug, 3);
-        const ragContext = buildRAGContext(similarQueries);
+        const tramite = tramitesInfo[slug] || {
+            nombre: 'Trámite Administrativo',
+            descripcion: 'Trámite administrativo en España'
+        };
 
-        console.log(`📚 RAG: Encontradas ${similarQueries.length} consultas similares para "${message.substring(0, 50)}..."`);
-
-        // System Instructions para Gemini - Comportamiento profesional y personalizado
+        // System Instructions para Gemini
         const systemInstructions = `Eres un experto senior en trámites administrativos de España (Gestor Administrativo Colegiado).
 Tu objetivo es ayudar al usuario con el trámite de **${tramite.nombre}** de forma efectiva.
 
@@ -54,42 +63,56 @@ NORMAS IMPORTANTES:
 5. Menciona documentos necesarios y plazos claramente.
 6. OBLIGATORIO: AL FINAL DE TU RESPUESTA, SIEMPRE AÑADE ESTE TEXTO EXACTO (con saltos de línea):
    
-   "\n\n✨ **¿Te parece complicado?**\n👉 **Pincha en el icono de WhatsApp verde de la esquina** y yo me encargo de todo personalmente. ¡Sin citas previas ni esperas!"
+   "\\n\\n✨ **¿Te parece complicado?**\\n👉 **Pincha en el icono de WhatsApp verde de la esquina** y yo me encargo de todo personalmente. ¡Sin citas previas ni esperas!"
 
 INFORMACIÓN ADICIONAL DEL TRÁMITE:
-- Descripción: ${tramite.descripcion || 'Trámite administrativo en España'}
+- Descripción: ${tramite.descripcion}`;
 
-${ragContext}`;
-
-        // Crear el prompt completo (REST DIRECTO)
-        const fullPrompt = `${systemInstructions}\n\nPREGUNTA DEL USUARIO: ${message}\n\nRESPUESTA (clara, estructurada y profesional):`;
 
         let aiResponse = "";
 
-        try {
-            console.log('📡 Conectando con Gemini API (Librería Oficial)...');
 
-            // Usamos modelo gemini-2.0-flash-exp (Versión experimental más reciente)
-            // La librería gestiona automáticamente el endpoint correcto
-            const model = genAI.getGenerativeModel({
-                model: "gemini-2.0-flash-exp",
-                generationConfig: {
-                    temperature: 0.7,
-                    topK: 40,
-                    topP: 0.95,
-                    maxOutputTokens: 1024,
-                }
+        try {
+            console.log('📡 Conectando con Groq API (GRATIS)...');
+            console.log('🔑 API Key presente:', !!process.env.GROQ_API_KEY);
+
+            console.log('⏳ Generando contenido con Llama 3.3 70B...');
+            const startTime = Date.now();
+
+            const completion = await groq.chat.completions.create({
+                model: "llama-3.3-70b-versatile", // Modelo gratuito y muy potente
+                messages: [
+                    {
+                        role: "system",
+                        content: systemInstructions
+                    },
+                    {
+                        role: "user",
+                        content: message
+                    }
+                ],
+                temperature: 0.7,
+                max_tokens: 1024,
             });
 
-            const result = await model.generateContent(fullPrompt);
-            const response = result.response;
-            aiResponse = response.text();
+            const endTime = Date.now();
+            aiResponse = completion.choices[0].message.content;
 
-        } catch (geminiError) {
-            console.error('⚠️ Error conectando con Gemini (REST), usando respuesta de contingencia:', geminiError.message);
+            console.log('✅ Respuesta de Groq recibida correctamente');
+            console.log('📏 Longitud de respuesta:', aiResponse.length, 'caracteres');
+            console.log('⏱️  Tiempo:', endTime - startTime, 'ms');
+            console.log('🚀 Modelo usado:', completion.model);
+
+        } catch (groqError) {
+            console.error('⚠️ Error conectando con Groq:');
+            console.error('  - Mensaje:', groqError.message);
+            console.error('  - Tipo:', groqError.constructor.name);
+            if (groqError.stack) {
+                console.error('  - Stack:', groqError.stack.split('\n').slice(0, 3).join('\n'));
+            }
 
             // RESPUESTA DE CONTINGENCIA (FALLBACK)
-            aiResponse = `[MODO SIN CONEXIÓN - REST] Lo siento, en este momento tengo dificultades para conectar con mi cerebro de IA, pero puedo darte información básica sobre **${tramite.nombre}**.
+            aiResponse = `[MODO SIN CONEXIÓN] Lo siento, en este momento tengo dificultades para conectar con mi cerebro de IA, pero puedo darte información básica sobre **${tramite.nombre}**.
 
 ${tramite.descripcion}
 
@@ -102,28 +125,13 @@ ${tramite.nombre === 'Hacienda' ? '- Declaración de la Renta\n- Certificados tr
 💡 Para una ayuda más personalizada, por favor usa el botón de **WhatsApp** que verás en esta página para hablar con un agente humano.`;
         }
 
-        // Guardar la consulta en la base de datos
-        let consultaId = null;
-        try {
-            const nuevaConsulta = await prisma.consulta.create({
-                data: {
-                    slug: slug,
-                    mensajeUsuario: message,
-                    respuestaIA: aiResponse,
-                },
-            });
-            consultaId = nuevaConsulta.id;
-        } catch (dbError) {
-            console.error('Error al guardar en base de datos:', dbError);
-        }
-
         return NextResponse.json({
             response: aiResponse,
             tramite: tramite.nombre,
-            consultaId: consultaId,
+            consultaId: null, // Sin base de datos por ahora
             ragInfo: {
-                similarQueriesFound: similarQueries.length,
-                usedRAG: similarQueries.length > 0
+                similarQueriesFound: 0,
+                usedRAG: false
             }
         });
 
