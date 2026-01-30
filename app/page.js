@@ -62,6 +62,13 @@ export default function Home() {
         </div>
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          {/* Mensaje de Bienvenida Personalizado */}
+          <div className="mb-8 animate-fade-in">
+            <p className="text-2xl md:text-3xl font-semibold text-yellow-200 mb-2">
+              👋 Bienvenido a la Web Administrativa de Alex
+            </p>
+          </div>
+
           <h1 className="text-5xl md:text-6xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 via-yellow-100 to-white">
             {t.home.hero.title}
           </h1>

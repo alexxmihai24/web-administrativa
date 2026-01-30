@@ -15,6 +15,17 @@ export default function ChatBox({ slug }) {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
+    // Mensaje de bienvenida inicial
+    useEffect(() => {
+        // Añadir mensaje de bienvenida del asistente al cargar
+        setMessages([{
+            role: 'assistant',
+            content: '👋 ¡Hola! Soy el asistente IA de Alex. ¿En qué puedo ayudarte hoy?',
+            timestamp: new Date(),
+            isWelcome: true
+        }]);
+    }, []); // Solo se ejecuta una vez al montar el componente
+
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
