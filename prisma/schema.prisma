@@ -1,0 +1,41 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Modelo para los tramites disponibles
+model Tramite {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  slug        String   @unique
+  descripcion String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Modelo para las consultas de los usuarios (con RAG)
+model Consulta {
+  id             Int        @id @default(autoincrement())
+  slug           String? // Trámite relacionado (para RAG)
+  mensajeUsuario String     @db.Text
+  respuestaIA    String?    @db.Text
+  timestamp      DateTime   @default(now())
+  feedbacks      Feedback[] // Relación con Feedback
+}
+
+// Modelo para feedback de usuarios (mejora continua)
+model Feedback {
+  id         Int      @id @default(autoincrement())
+  consultaId Int
+  consulta   Consulta @relation(fields: [consultaId], references: [id], onDelete: Cascade)
+  rating     Int // 1 = 👎, 5 = 👍
+  comentario String?  @db.Text
+  timestamp  DateTime @default(now())
+}
