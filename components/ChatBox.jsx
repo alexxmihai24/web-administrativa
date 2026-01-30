@@ -38,12 +38,22 @@ export default function ChatBox({ slug }) {
         const userMessage = input.trim();
         setInput('');
 
-        // Agregar mensaje del usuario
-        setMessages(prev => [...prev, {
+        // Crear el nuevo mensaje del usuario
+        const newUserMsgObj = {
             role: 'user',
             content: userMessage,
             timestamp: new Date()
-        }]);
+        };
+
+        // Agregar mensaje del usuario al estado local
+        setMessages(prev => [...prev, newUserMsgObj]);
+
+        // Preparar el historial para enviarlo al backend (excluyendo mensajes de error o bienvenida si no se quieren)
+        // Incluimos el nuevo mensaje que acabamos de crear
+        const historyToSend = [...messages, newUserMsgObj].filter(m => !m.isError && !m.isWelcome).map(m => ({
+            role: m.role,
+            content: m.content
+        }));
 
         setIsLoading(true);
 
@@ -56,6 +66,7 @@ export default function ChatBox({ slug }) {
                 },
                 body: JSON.stringify({
                     message: userMessage,
+                    messages: historyToSend, // Enviamos el historial completo
                     slug: slug
                 }),
             });
